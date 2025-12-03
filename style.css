@@ -1,0 +1,795 @@
+/* style.css */
+
+/* --- إعدادات عامة (General Settings) --- */
+/* --- إعدادات الألوان الفاتحة (Light Luxury) --- */
+:root {
+    --gold: #D4AF37;          /* ذهبي غامق قليلاً للوضوح على الفاتح */
+    --gold-hover: #b89f46;
+    --dark-bg: #F9F7F2;       /* لون الخلفية: كريمي فاتح جداً (Pearl White) */
+    --card-bg: rgba(255, 255, 255, 0.85); /* البطاقات بيضاء شبه شفافة */
+    --text-main: #2a2a2a;     /* لون النصوص: رمادي فحمي (ليس أسود تماماً) */
+    --text-gray: #666;        /* النصوص الثانوية */
+    --footer-bg: #1a1a1a;     /* الفوتر يفضل أن يبقى داكناً للتباين، أو نجعله فاتحاً حسب ذوقك */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+
+body { 
+    background-color: var(--dark-bg); 
+    font-family: 'Reem Kufi', sans-serif;
+    color: var(--text-main); /* تغيير لون النص الأساسي للداكن */
+    overflow-x: hidden;
+    transition: all 0.5s ease;
+}
+
+/* --- 1. الناف بار (Navbar) --- */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.95), transparent);
+    transition: all 0.3s;
+}
+
+.nav-logo {
+    font-size: 2rem;
+    color: var(--gold);
+    text-shadow: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Reem Kufi', sans-serif;
+    z-index: 1001;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    transition: color 0.3s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-links li a:hover {
+    color: var(--gold);
+}
+
+.lang-btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.lang-btn:hover {
+    background: var(--gold);
+    color: #000;
+}
+
+.whatsapp-icon {
+    width: 24px;
+    height: 24px;
+    fill: #25D366;
+    transition: transform 0.3s;
+}
+
+a:hover .whatsapp-icon {
+    transform: scale(1.2);
+}
+
+/* القائمة الجانبية (همبرغر) - للجوال */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    z-index: 1001;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.bar {
+    width: 30px;
+    height: 3px;
+    background-color: var(--gold);
+    transition: 0.3s;
+}
+
+.hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.hamburger.active .bar:nth-child(2) { opacity: 0; }
+.hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    transition: 0.4s ease-in-out;
+    z-index: 1000;
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-menu a {
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.mobile-menu a:hover {
+    color: var(--gold);
+}
+
+/* --- 2. الهيرو (Hero Section) --- */
+#hero-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 1;
+}
+
+.hero-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: slideShow 15s infinite;
+}
+
+.slide:nth-child(1) { background-image: url('https://images.unsplash.com/photo-1615671524827-c1fe3973b648?q=80&w=2574&auto=format&fit=crop'); animation-delay: 0s; }
+.slide:nth-child(2) { background-image: url('https://images.unsplash.com/photo-1590430460307-a973144492e3?q=80&w=2522&auto=format&fit=crop'); animation-delay: 5s; }
+.slide:nth-child(3) { background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop'); animation-delay: 10s; }
+
+@keyframes slideShow {
+    0% { opacity: 0; transform: scale(1); }
+    10% { opacity: 1; }
+    33% { opacity: 1; }
+    43% { opacity: 0; transform: scale(1.1); }
+    100% { opacity: 0; }
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0.95) 0%, rgba(20,10,5,0.7) 50%, rgba(0,0,0,0.8) 100%);
+    z-index: -1;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    width: 90%;
+    max-width: 1400px;
+}
+
+.brand-name {
+    font-family: 'Reem Kufi', sans-serif;
+    font-size: 9rem;
+    color: #c8a278;
+    line-height: 0.8;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.brand-en {
+    font-family: sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 12px;
+    color: #888;
+    text-align: center;
+    margin-top: 10px;
+    margin-right: -10px;
+}
+
+.vertical-line {
+    width: 2px;
+    height: 150px;
+    background: linear-gradient(to bottom, transparent, #c8a278, transparent);
+    opacity: 0.7;
+}
+
+.verse-container {
+    flex: 1;
+    font-family: 'Amiri', serif;
+    font-size: 2.2rem;
+    color: #f0f0f0;
+    font-style: italic;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 1.5s ease, transform 1.5s ease;
+}
+
+.verse-container.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* --- 3. عناصر العرض ثلاثي الأبعاد (Cart) --- */
+#cart-scroll-spacer {
+    height: 900vh; /* طول رحلة العربة */
+    width: 100%;
+    position: relative; /* يحجز مساحة حقيقية في الصفحة */
+    z-index: 1;
+    pointer-events: none;
+}
+
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1; /* خلف الهيرو، ويظهر بعده */
+    opacity: 0;
+}
+
+.text-stage-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-group {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100px);
+}
+
+.text-content {
+    font-size: 3.5rem;
+    color: #ececec;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.9);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.gold-word {
+    color: #D4AF37;
+    font-family: 'Amiri', serif;
+    font-style: italic;
+    text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+}
+
+.cta-container {
+    position: fixed; 
+    bottom: 10%; 
+    left: 0; 
+    width: 100%;
+    display: flex; 
+    justify-content: center; 
+    gap: 30px;
+    
+    /* التغيير هنا: رفعنا الرقم ليصبح أعلى من الفوتر (500) والمحتوى (200) */
+    z-index: 600; 
+    
+    /* مهم: نجعل الحاوية نفسها لا تستقبل اللمس، لتسمح بالضغط على ما خلفها */
+    pointer-events: none; 
+    
+    opacity: 0; 
+    visibility: hidden; 
+}
+
+.cta-btn {
+    background: rgba(0,0,0,0.6); 
+    border: 1px solid var(--gold); 
+    color: #fff;
+    padding: 15px 40px; 
+    font-size: 1.2rem; 
+    cursor: pointer;
+    font-family: 'Reem Kufi', sans-serif;
+    transition: all 0.4s ease; 
+    backdrop-filter: blur(5px);
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+    position: relative; 
+    overflow: hidden;
+    
+    /* مهم: نعيد تفعيل اللمس للأزرار فقط */
+    pointer-events: auto; 
+}
+
+.cta-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(207, 161, 67, 0.4), transparent);
+    transition: 0.5s;
+}
+
+.cta-btn:hover {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(207, 161, 67, 0.5);
+}
+
+.cta-btn:hover::before {
+    left: 100%;
+}
+
+/* --- 4. الحاوية الرئيسية لما بعد العربة (Main Content Wrapper) --- */
+#main-content {
+    position: relative;
+    z-index: 200; 
+    background-color: transparent; /* هام جداً: كانت سوداء وهي سبب المشكلة الأولى */
+    width: 100%;
+    pointer-events: none; /* يسمح بالضغط على الهيرو في الخلفية */
+}
+
+/* إعادة تفعيل النقر للعناصر الداخلية */
+#main-content > * {
+    pointer-events: auto;
+}
+
+/* --- 5. قسم المنتجات --- */
+#products-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--dark-bg); 
+    z-index: 200;
+    margin-top: 0; 
+}
+
+.prod-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.prod-slide.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.prod-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    filter: brightness(0.4);
+    transform: scale(1);
+}
+
+.prod-info {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    margin-bottom: 20px;
+    transform: translateY(-50px);
+    opacity: 0;
+}
+
+.prod-title {
+    font-size: 4rem;
+    color: var(--gold);
+    text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+}
+
+.prod-desc {
+    font-size: 1.5rem;
+    color: #ddd;
+    font-family: 'Amiri', serif;
+    margin-top: 10px;
+    max-width: 600px;
+}
+
+.prod-visuals {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    perspective: 1000px;
+}
+
+.main-prod-img {
+    width: 350px;
+    height: auto;
+    z-index: 10;
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+    transform: scale(0.8);
+    opacity: 0;
+}
+
+.scatter-item {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    z-index: 5;
+    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.shop-now-btn {
+    display: inline-block;
+    padding: 12px 35px;
+    background: linear-gradient(45deg, var(--gold), #f0e68c);
+    color: #000;
+    font-size: 1.2rem;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(207, 161, 67, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.shop-now-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(207, 161, 67, 0.7);
+}
+
+/* --- 6. المعرض والمستودع 360 --- */
+.panorama-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    border-bottom: 5px solid var(--gold);
+    background-color: #000;
+    z-index: 300; /* طبقة أعلى من المنتجات */
+}
+
+.canvas-360 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    width: 80%;
+    pointer-events: none;
+}
+
+.text-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    visibility: hidden;
+}
+
+.pan-title {
+    font-size: 4rem;
+    color: var(--gold);
+    text-shadow: 0 5px 30px rgba(0,0,0,1);
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.pan-desc {
+    font-size: 1.8rem;
+    font-family: 'Amiri', serif;
+    background: rgba(234, 235, 218, 0.6);
+    padding: 10px 30px;
+    border-radius: 50px;
+    border: 1px solid rgba(207, 161, 67, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.map-card {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    width: 280px;
+    padding: 20px;
+    background: rgba(10, 10, 10, 0.9);
+    border: 1px solid var(--gold);
+    border-radius: 15px;
+    z-index: 20;
+    opacity: 0;
+    transform: translateY(50px);
+    text-align: right;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.map-frame {
+    width: 100%;
+    height: 120px;
+    background: #333;
+    margin-top: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.map-img-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+}
+
+/* --- 7. الفوتر --- */
+.site-footer {
+    position: relative;
+    z-index: 500; /* أعلى رقم في الموقع ليغطي المستودع عند النهاية */
+    background-color: #f7f4ea;
+    color: #898888;
+    padding: 70px 20px 20px;
+    border-top: 1px solid var(--gold);
+    /* هذا الهامش السلبي يلغي الفراغ الصغير المحتمل */
+    margin-top: -1px; 
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    text-align: right;
+}
+
+html[dir="ltr"] .footer-container {
+    text-align: left;
+}
+
+.footer-col h3 {
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #6a6969;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--gold);
+    padding-right: 10px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.social-icons a:hover {
+    background: var(--gold);
+    color: #000;
+    border-color: var(--gold);
+}
+
+.footer-bottom {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #222;
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* --- 8. اللودر المطور (دائرة ذهبية) --- */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #f7f4ea; /* لون خلفية داكن */
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 1s ease-out, visibility 1s;
+}
+
+/* الحاوية التي تجمع الدائرة والنص */
+.loader-content {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* الدائرة الدوارة */
+.loader-circle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(207, 161, 67, 0.1); /* لون الحلقة الخافت */
+    border-top: 3px solid var(--gold); /* الجزء الذهبي اللامع */
+    border-radius: 50%;
+    animation: spin 1.5s linear infinite;
+    box-shadow: 0 0 15px rgba(207, 161, 67, 0.1); /* توهج بسيط */
+}
+
+/* كلمة أكم في الوسط */
+.loader-text-center {
+    font-family: 'Reem Kufi', sans-serif;
+    font-size: 3rem;
+    color: var(--gold);
+    font-weight: bold;
+    animation: pulseText 2s ease-in-out infinite;
+}
+
+/* النص السفلي الصغير */
+.loader-status {
+    font-family: 'Amiri', serif;
+    font-size: 1rem;
+    color: #666;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+/* حركات الأنيميشن */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseText {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(0.95); }
+}
+
+/* --- 9. التجاوب مع الجوال (Media Queries) --- */
+@media (max-width: 900px) {
+    .navbar { padding: 15px 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    
+    .content-wrapper { flex-direction: column; text-align: center; gap: 20px; }
+    .vertical-line { width: 100px; height: 2px; background: linear-gradient(to right, transparent, #c8a278, transparent); }
+    .brand-name { font-size: 6rem; }
+    .verse-container { font-size: 1.5rem; justify-content: center; text-align: center; }
+    .text-content { font-size: 2rem; }
+    .cta-container { flex-direction: column; bottom: 5%; align-items: center; gap: 15px; }
+    .cta-btn { width: 80%; }
+    
+    .prod-title { font-size: 2.5rem; }
+    .prod-desc { font-size: 1.1rem; padding: 0 20px; }
+    .main-prod-img { width: 200px; }
+    .scatter-item { width: 50px; height: 50px; }
+    
+    /* تحسينات المعرض والمستودع */
+    .overlay-text { width: 95%; padding: 0 10px; }
+    .pan-title { font-size: 1.8rem; margin-bottom: 5px; text-shadow: 0 2px 10px rgba(0,0,0,1); }
+    .pan-desc { font-size: 0.9rem; padding: 6px 15px; line-height: 1.4; border-radius: 20px; background: rgba(243, 242, 231, 0.7); }
+    .map-card { width: 160px; padding: 8px; right: 15px; bottom: 30px; border-radius: 8px; }
+    .map-card div { font-size: 0.7rem !important; margin-bottom: 3px !important; }
+    .map-frame { height: 70px; margin-top: 5px; }
+    /* --- تصحيح زر المتجر للجوال --- */
+    .shop-now-btn {
+        font-size: 0.9rem; /* تصغير حجم الخط */
+        padding: 10px 25px; /* تقليل الهوامش الداخلية */
+        width: auto; /* العرض حسب النص */
+        min-width: 180px; /* عرض أدنى مناسب لللمس */
+        white-space: nowrap; /* منع النص من النزول لسطرين */
+        box-shadow: 0 0 10px rgba(207, 161, 67, 0.4); /* تخفيف الظل */
+    }
+
+    /* رفع الزر قليلاً للأعلى في الجوال حتى لا يغطي عليه شريط المتصفح السفلي */
+    #products-section > div[style*="absolute"] {
+        bottom: 60px !important; 
+    }
+}
+

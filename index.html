@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أَكْمْ - AKM | Experience</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@1,400;1,700&family=Reem+Kufi:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-circle"></div>
+            <div class="loader-logo-text loader-text-center">أَكْمْ</div>
+        </div>
+        <div class="loader-status">جاري تحضير التجربة...</div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-logo" data-key="nav_logo" onclick="window.scrollTo(0,0)">أَكْمْ</div>
+        
+        <ul class="nav-links">
+            <li><a href="#" data-key="home">الرئيسية</a></li>
+            <li><a href="#" data-key="gallery">المعرض</a></li>
+            <li><a href="#" data-key="warehouse">المستودع</a></li>
+            <li><a href="#" data-key="store">المتجر</a></li>
+            <li><a href="#" data-key="contact">اتصل بنا</a></li>
+            <li>
+                <a href="https://wa.me/966563494639" target="_blank" title="WhatsApp">
+                    <svg class="whatsapp-icon" viewBox="0 0 24 24">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.654-.698c.991.54 2.112.825 3.259.825.001 0 0 0 0 0 3.181 0 5.768-2.586 5.768-5.766 0-1.541-.6-2.99-1.691-4.081-1.09-1.09-2.54-1.691-4.08-1.691zm9.268 2.365c1.693 1.693 2.623 3.945 2.622 6.341 0 4.943-4.019 8.963-8.965 8.963-1.579 0-3.123-.414-4.495-1.203l-4.75 1.246 1.268-4.63c-.836-1.448-1.277-3.123-1.277-4.819 0-4.945 4.02-8.965 8.967-8.965 2.396 0 4.649.932 6.344 2.627-.001 0-.001 0-.001 0z"/>
+                        <path d="M15.703 14.12c-.22-.11-1.303-.643-1.505-.717-.202-.073-.349-.11-.496.11-.147.22-.569.717-.697.863-.129.147-.257.165-.477.055-.22-.11-.929-.342-1.77-1.092-.66-.588-1.106-1.314-1.235-1.535-.129-.22-.014-.339.096-.448.1-.099.22-.257.33-.385.11-.129.147-.22.22-.367.073-.147.037-.275-.018-.385-.055-.11-.496-1.193-.679-1.634-.178-.429-.36-.371-.496-.378-.129-.007-.275-.008-.422-.008-.147 0-.385.055-.587.275-.202.22-.771.753-.771 1.836 0 1.083.789 2.129.899 2.276.11.147 1.551 2.368 3.758 3.321 1.503.649 1.808.52 2.459.459.651-.061 1.303-.532 1.487-1.046.183-.514.183-.954.129-1.046-.055-.092-.202-.147-.422-.257z"/>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="lang-btn" onclick="toggleLanguage()">English</button>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#" data-key="home" onclick="toggleMobileMenu()">الرئيسية</a>
+            <a href="#" data-key="gallery" onclick="toggleMobileMenu()">المعرض</a>
+            <a href="#" data-key="warehouse" onclick="toggleMobileMenu()">المستودع</a>
+            <a href="#" data-key="store" onclick="toggleMobileMenu()">المتجر</a>
+            <a href="#" data-key="contact" onclick="toggleMobileMenu()">اتصل بنا</a>
+            <a href="https://wa.me/966563494639" target="_blank" style="color: #25D366; margin-top: 10px;">
+                WhatsApp
+            </a>
+        </div>
+    </nav>
+
+    <div id="canvas-container"></div>
+
+    <div id="hero-section">
+        <div class="hero-slider">
+            <div class="slide"></div>
+            <div class="slide"></div>
+            <div class="slide"></div>
+        </div>
+        <div class="overlay"></div>
+        <div class="content-wrapper">
+            <div class="brand-container">
+                <div class="brand-name">أَكْمْ</div>
+                <div class="brand-en">AKM</div>
+            </div>
+            <div class="vertical-line"></div>
+            <div class="verse-container" id="verse-box"></div>
+        </div>
+    </div>
+
+    <div class="text-stage-container">
+        <div class="text-group" id="group1">
+            <div class="text-content">
+                <div data-key="t1_main">أصالة <span class="gold-word">التصميم</span></div>
+                <div data-key="t1_sub" style="font-size: 2rem; color: #888; margin-top: 10px;">وعمق المعنى</div>
+            </div>
+        </div>
+        <div class="text-group" id="group2">
+            <div class="text-content">
+                <div data-key="t2_main">تفاصيل دقيقة تروي</div>
+                <div data-key="t2_sub">قصة <span class="gold-word">الضيافة</span></div>
+            </div>
+        </div>
+        <div class="text-group" id="group3">
+            <div class="text-content">
+                <div data-key="t3_main">حيث يجتمع <span class="gold-word">الفن</span></div>
+                <div data-key="t3_sub">بمذاق لا يُنسى</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-container" id="cta-buttons">
+        <button class="cta-btn" onclick="goToBooking('hotel')" data-key="btn_hotel">حجز فنادق</button>
+        <button class="cta-btn" onclick="goToBooking('event')" data-key="btn_event">حجز مناسبات</button>
+    </div>
+
+    <div id="main-content">
+        
+        <div id="virtual-scroll" style="height: 900vh; width: 100%; background: transparent;"></div>
+
+        <section id="products-section">
+            
+            <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 50; text-align: center;">
+                <a href="https://akm-three.vercel.app/" class="shop-now-btn" data-key="btn_shop">تصفح المتجر الإلكتروني</a>
+            </div>
+
+            <div class="prod-slide">
+                <div class="prod-bg" style="background-image: url('pexels-halid-elosman-3328515-28161236.jpg?q=80&w=1920&auto=format&fit=crop');"></div>
+                <div class="prod-info">
+                    <h2 class="prod-title" data-key="coffee_title">القهوة السعودية</h2>
+                    <p class="prod-desc" data-key="coffee_desc">خلطة فاخرة ومميزة تعكس كرم الضيافة الأصيلة</p>
+                </div>
+                <div class="prod-visuals">
+                    <img src="Gemini_Generated_Image_dgwkaldgwkaldgwk (1).png" class="main-prod-img" alt="Saudi Coffee">
+                    <img src="https://static.vecteezy.com/system/resources/previews/024/093/006/original/cardamom-transparent-background-free-png.png" class="scatter-item" style="--x: -150px; --y: -120px; --r: 45deg;">
+                    <img src="https://png.pngtree.com/png-clipart/20220117/original/pngtree-coffee-beans-falling-png-image_7114881.png" class="scatter-item" style="--x: 180px; --y: -100px; --r: -30deg;">
+                    <img src="https://png.pngtree.com/png-clipart/20230414/original/pngtree-coffee-beans-png-image_9056260.png" class="scatter-item" style="--x: -120px; --y: 150px; --r: 90deg;">
+                    <img src="https://static.vecteezy.com/system/resources/previews/024/093/011/original/cardamom-transparent-background-free-png.png" class="scatter-item" style="--x: 150px; --y: 120px; --r: -15deg;">
+                </div>
+            </div>
+
+            <div class="prod-slide">
+                <div class="prod-bg" style="background-image: url('pexels-jonathanborba-19063541.jpg?q=80&w=1920&auto=format&fit=crop');"></div>
+                <div class="prod-info">
+                    <h2 class="prod-title" data-key="dates_title">التمور الفاخرة</h2>
+                    <p class="prod-desc" data-key="dates_desc">سكري، صقعي، مجدول، وعجوة المدينة.. محشوة بأجود المكسرات</p>
+                </div>
+                <div class="prod-visuals">
+                    <img src="Gemini_Generated_Image_vj6zucvj6zucvj6z (1).png" class="main-prod-img" alt="Dates">
+                    <img src="https://png.pngtree.com/png-vector/20240515/ourmid/pngtree-dried-dates-transparent-background-png-image_12466986.png" class="scatter-item" style="--x: -200px; --y: -150px; --r: 20deg;">
+                    <img src="https://pngimg.com/d/pistachio_PNG24.png" class="scatter-item" style="--x: 220px; --y: -80px; --r: -45deg;">
+                    <img src="https://png.pngtree.com/png-vector/20231016/ourmid/pngtree-pecan-nuts-png-image_10196850.png" class="scatter-item" style="--x: -180px; --y: 140px; --r: 60deg;">
+                    <img src="https://png.pngtree.com/png-vector/20230906/ourmid/pngtree-ajwa-dates-fruit-png-image_10006764.png" class="scatter-item" style="--x: 190px; --y: 160px; --r: -20deg;">
+                </div>
+            </div>
+
+            <div class="prod-slide">
+                <div class="prod-bg" style="background-image: url('pexels-jess-vide-5507634.jpg?q=80&w=1920&auto=format&fit=crop');"></div>
+                <div class="prod-info">
+                    <h2 class="prod-title" data-key="nuts_title">المكسرات المقرمشة</h2>
+                    <p class="prod-desc" data-key="nuts_desc">تشكيلة من المكسرات اليابانية، الفصفص الفاخر، والمكسرات المشكلة</p>
+                </div>
+                <div class="prod-visuals">
+                    <img src="Gemini_Generated_Image_2h4yx52h4yx52h4y (1).png" class="main-prod-img" alt="Nuts">
+                    <img src="https://png.pngtree.com/png-clipart/20230504/original/pngtree-sunflower-seeds-png-image_9138670.png" class="scatter-item" style="--x: -220px; --y: -100px; --r: 10deg;">
+                    <img src="https://pngimg.com/d/cashew_PNG23.png" class="scatter-item" style="--x: 200px; --y: -140px; --r: -60deg;">
+                    <img src="https://png.pngtree.com/png-vector/20240125/ourmid/pngtree-crackers-snack-png-image_11488109.png" class="scatter-item" style="--x: -160px; --y: 160px; --r: 30deg;">
+                    <img src="https://png.pngtree.com/png-clipart/20220102/original/pngtree-almond-nut-realistic-png-image_7017686.png" class="scatter-item" style="--x: 180px; --y: 120px; --r: -15deg;">
+                </div>
+            </div>
+
+            <div class="prod-slide">
+                <div class="prod-bg" style="background-image: url('pexels-marianasilvestre-4514545.jpg?q=80&w=1920&auto=format&fit=crop');"></div>
+                <div class="prod-info">
+                    <h2 class="prod-title" data-key="choco_title">عالم الشوكولاتة</h2>
+                    <p class="prod-desc" data-key="choco_desc">ألواح غنية وقطع محشوة بألذ النكهات العالمية</p>
+                </div>
+                <div class="prod-visuals">
+                    <img src="Gemini_Generated_Image_8qix7y8qix7y8qix-Photoroom.png" class="main-prod-img" alt="Chocolate">
+                    <img src="https://png.pngtree.com/png-clipart/20230504/original/pngtree-chocolate-bar-pieces-3d-realistic-png-image_9138407.png" class="scatter-item" style="--x: -200px; --y: -130px; --r: 25deg;">
+                    <img src="https://png.pngtree.com/png-clipart/20221014/original/pngtree-chocolate-splash-3d-element-png-image_8686616.png" class="scatter-item" style="--x: 210px; --y: -110px; --r: -45deg;">
+                    <img src="https://png.pngtree.com/png-vector/20231019/ourmid/pngtree-caramel-candy-png-image_10214840.png" class="scatter-item" style="--x: -150px; --y: 150px; --r: 70deg;">
+                    <img src="https://png.pngtree.com/png-vector/20230906/ourmid/pngtree-chocolate-candy-png-image_9999947.png" class="scatter-item" style="--x: 170px; --y: 130px; --r: -20deg;">
+                </div>
+            </div>
+        </section>
+
+<div class="panorama-wrapper" id="gallery-wrapper">
+        <canvas id="gallery-canvas" class="canvas-360"></canvas>
+        
+        <div class="overlay-text">
+            <div class="text-slide" id="g-text1">
+                <h2 class="pan-title" data-key="gal_title1">معرض أكم الفاخر</h2>
+                <p class="pan-desc" data-key="gal_desc1">حيث تلتقي الفخامة بالضيافة في أبهى صورها</p>
+            </div>
+            
+            <div class="text-slide" id="g-text2">
+                <h2 class="pan-title" data-key="gal_title2">تجربة تسوق فريدة</h2>
+                <p class="pan-desc" data-key="gal_desc2">تجوّل بين أرقى أنواع التمور والقهوة المختارة بعناية</p>
+            </div>
+        </div>
+
+        <div class="map-card" id="g-map">
+            <div style="color:var(--gold); font-size: 1.2rem;" data-key="gal_map_title">📍فرع الدائري</div>
+            <div style="font-size:0.9rem; color:#ccc;" data-key="gal_map_desc">المدينة المنورة </div>
+            <div class="map-frame">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Google_Maps_Logo_2020.svg/512px-Google_Maps_Logo_2020.svg.png" class="map-img-placeholder">
+            </div>
+        </div>
+    </div>
+
+    <div class="panorama-wrapper" id="warehouse-wrapper">
+        <canvas id="warehouse-canvas" class="canvas-360"></canvas>
+        
+        <div class="overlay-text">
+            <div class="text-slide" id="w-text1">
+                <h2 class="pan-title" data-key="war_title1">مستودعاتنا المركزية</h2>
+                <p class="pan-desc" data-key="war_desc1">تقنيات حفظ متطورة لضمان الجودة والطزاجة</p>
+            </div>
+            
+            <div class="text-slide" id="w-text2">
+                <h2 class="pan-title" data-key="war_title2">من المزرعة إليك</h2>
+                <p class="pan-desc" data-key="war_desc2">سلسلة إمداد مُحكمة تضمن وصول المنتج في قمته</p>
+            </div>
+        </div>
+
+        <div class="map-card" id="w-map">
+            <div style="color:var(--gold); font-size: 1.2rem;" data-key="war_map_title">📍 المنطقة الصناعية</div>
+            <div style="font-size:0.9rem; color:#ccc;" data-key="war_map_desc">المدينة المنورة - المنطقة الصناعية</div>
+            <div class="map-frame">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Google_Maps_Logo_2020.svg/512px-Google_Maps_Logo_2020.svg.png" class="map-img-placeholder">
+            </div>
+        </div>
+    </div>
+
+        <footer class="site-footer">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <div class="nav-logo" style="margin-bottom: 15px;">أَكْمْ</div>
+                    <p data-key="footer_about" style="color: #aaa; line-height: 1.6;">
+                        علامة سعودية فاخرة تقدم تجربة ضيافة استثنائية من خلال أجود أنواع القهوة والتمور والمكسرات.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h3 data-key="footer_links">روابط سريعة</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" data-key="home">الرئيسية</a></li>
+                        <li><a href="#" data-key="gallery">المعرض</a></li>
+                        <li><a href="#" data-key="store">المتجر الإلكتروني</a></li>
+                        <li><a href="#" data-key="btn_hotel">حجز الفنادق</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h3 data-key="footer_contact">تواصل معنا</h3>
+                    <p>📍 <span data-key="loc_riyadh">المدينة المنورة ، المملكة العربية السعودية</span></p>
+                    <p>📞 <a href="tel:0563494639" style="color:#aaa; text-decoration:none;">+966 56 349 4639</a></p>
+                    <p>✉️ info@akm.sa</p>
+                </div>
+
+                <div class="footer-col">
+                    <h3 data-key="footer_follow">تابعنا</h3>
+                    <div class="social-icons">
+                        <a href="#">X</a> 
+                        <a href="#">Instagram</a>
+                        <a href="#">Snapchat</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p data-key="copyright">جميع الحقوق محفوظة © 2025 أكم - AKM</p>
+            </div>
+        </footer>
+
+    </div>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "gsap": "https://unpkg.com/gsap@3.12.5/index.js",
+                "gsap/ScrollTrigger": "https://unpkg.com/gsap@3.12.5/ScrollTrigger.js"
+            }
+        }
+    </script>
+
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>

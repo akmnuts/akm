@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز خدمات أكم | AKM Booking</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@1,400;1,700&family=Reem+Kufi:wght@400;700&family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+ /* --- إعدادات الهوية (Light Luxury Theme) --- */
+    :root {
+        --gold: #CCA45B;
+        --gold-hover: #b88e40;
+        --main-bg: #FDFBF7;        /* كريمي فاتح جداً */
+        --card-bg: #ffffff;
+        --text-main: #4A3B32;      /* بني غامق */
+        --text-light: #888;
+        --footer-bg: #2C241F;      /* بني داكن للفوتر */
+        --red-offer: #c62828;
+        --shadow-soft: 0 10px 30px rgba(74, 59, 50, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+    
+    body { 
+        background-color: var(--main-bg); 
+        color: var(--text-main); 
+        font-family: 'Tajawal', sans-serif; 
+        overflow-x: hidden;
+        min-height: 100vh;
+        direction: rtl;
+    }
+
+    /* --- 1. الناف بار --- */
+    .navbar {
+        position: fixed; top: 0; left: 0; width: 100%; padding: 15px 50px;
+        display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        background: linear-gradient(to bottom, rgba(253, 251, 247, 0.98), rgba(253, 251, 247, 0.9));
+        box-shadow: 0 2px 20px rgba(0,0,0,0.03);
+        transition: all 0.3s;
+    }
+    .nav-logo { font-size: 2rem; color: var(--gold); font-weight: bold; cursor: pointer; font-family: 'Reem Kufi', sans-serif; }
+    .nav-links { list-style: none; display: flex; gap: 30px; align-items: center; }
+    .nav-links li a { text-decoration: none; color: var(--text-main); font-size: 1.1rem; transition: 0.3s; font-weight: 500; }
+    .nav-links li a:hover { color: var(--gold); }
+    .lang-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 5px 15px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
+    .lang-btn:hover { background: var(--gold); color: white; }
+    .hamburger { display: none; }
+
+    /* --- 2. الهيدر (Header) --- */
+    .page-header {
+        padding: 160px 20px 60px;
+        text-align: center;
+        background-size: cover; background-position: center;
+        position: relative; color: white;
+        transition: background-image 0.5s ease-in-out;
+        margin-bottom: 40px;
+    }
+    .page-header::before {
+        content: ''; position: absolute; inset: 0;
+        background: linear-gradient(to bottom, rgba(44, 36, 31, 0.7), var(--main-bg));
+    }
+    .header-content { position: relative; z-index: 1; }
+    .page-title { font-size: 3rem; margin-bottom: 15px; font-family: 'Reem Kufi'; text-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    .page-subtitle { font-size: 1.2rem; opacity: 0.95; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+
+    /* أزرار التبديل */
+    .mode-switcher { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
+    .mode-btn {
+        padding: 12px 35px; border: 1px solid rgba(255,255,255,0.4); background: rgba(0,0,0,0.4); color: #fff;
+        border-radius: 50px; cursor: pointer; transition: 0.3s; font-family: 'Tajawal'; font-weight: bold; backdrop-filter: blur(5px);
+    }
+    .mode-btn.active { background: var(--gold); color: white; border-color: var(--gold); box-shadow: 0 5px 15px rgba(204, 164, 91, 0.4); }
+
+    /* --- 3. قصة أكم --- */
+    .story-section { padding: 40px 20px; text-align: center; max-width: 900px; margin: 0 auto 60px; }
+    .story-title { font-size: 2.2rem; color: var(--text-main); font-weight: 800; margin-bottom: 25px; font-family: 'Reem Kufi'; }
+    .story-title span { color: var(--gold); border-bottom: 3px solid var(--gold); padding-bottom: 5px; }
+    .story-text { line-height: 1.9; color: var(--text-light); font-size: 1.15rem; }
+
+    /* --- 4. شبكة الباقات (Packages) --- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; }
+    .packages-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;
+        animation: fadeInUp 0.8s forwards; opacity: 0;
+    }
+
+    .pkg-card {
+        background: var(--card-bg); border-radius: 15px; overflow: hidden;
+        box-shadow: var(--shadow-soft); border: 1px solid #eee;
+        display: flex; flex-direction: column; transition: 0.3s; position: relative;
+    }
+    .pkg-card:hover { transform: translateY(-10px); border-color: var(--gold); box-shadow: 0 15px 40px rgba(204, 164, 91, 0.15); }
+    
+    .offer-badge { 
+        position: absolute; top: 15px; left: -35px; background: var(--red-offer); color: white; 
+        padding: 5px 40px; transform: rotate(-45deg); font-weight: bold; z-index: 10; font-size: 13px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .pkg-header { background: #fafafa; padding: 25px; text-align: center; border-bottom: 1px solid #eee; }
+    .pkg-header.special { background: var(--gold); color: white; }
+    .pkg-header.vip { background: var(--text-main); color: white; }
+    
+    .pkg-name { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; font-family: 'Reem Kufi'; }
+    .price-box { margin-top: 10px; }
+    .old-price { text-decoration: line-through; opacity: 0.7; font-size: 14px; margin-left: 8px; color: inherit; }
+    .new-price { font-size: 26px; font-weight: 900; }
+
+    .pkg-body { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+    .pkg-features { list-style: none; padding: 0; margin-bottom: 25px; font-size: 0.95rem; color: var(--text-main); }
+    .pkg-features li { padding: 10px 0; border-bottom: 1px dashed #eee; display: flex; justify-content: space-between; }
+    .pkg-features li span:last-child { color: var(--gold); font-weight: bold; }
+    
+    .select-btn {
+        width: 100%; padding: 14px; background: var(--text-main); border: none; color: white;
+        border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: auto; transition: 0.3s;
+        font-family: 'Tajawal'; font-size: 1rem;
+    }
+    .select-btn:hover { background: var(--gold); box-shadow: 0 5px 15px rgba(204, 164, 91, 0.3); }
+    .pkg-header.special ~ .pkg-body .select-btn { background: var(--gold); }
+    .pkg-header.special ~ .pkg-body .select-btn:hover { background: var(--text-main); }
+
+    /* --- 5. صمم باقتك (Builder Accordion) --- */
+    #builder-section { display: none; margin-top: 80px; }
+    .builder-container { max-width: 900px; margin: 0 auto; }
+    
+    .accordion-item { background: white; border-radius: 12px; margin-bottom: 20px; border: 1px solid #eee; overflow: hidden; box-shadow: var(--shadow-soft); }
+    .accordion-header { padding: 18px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fff; transition: 0.3s; }
+    .accordion-header:hover { background: #fcfcfc; }
+    .acc-title { font-weight: bold; color: var(--text-main); display: flex; align-items: center; gap: 12px; font-size: 1.1rem; }
+    .acc-icon { font-size: 1.3rem; }
+    
+    .accordion-item.active .accordion-header { background: var(--gold); color: white; }
+    .accordion-item.active .acc-title { color: white; }
+    .accordion-body { display: none; padding: 0; animation: fadeIn 0.3s; }
+    .accordion-item.active .accordion-body { display: block; }
+
+    .prod-row { display: flex; align-items: center; justify-content: space-between; padding: 15px 25px; border-bottom: 1px solid #f7f7f7; }
+    .prod-row:last-child { border-bottom: none; }
+    .prod-info { display: flex; align-items: center; gap: 15px; flex: 1; }
+    
+    /* Checkbox مخصص */
+    .custom-checkbox { width: 22px; height: 22px; border: 2px solid #ddd; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+    input[type="checkbox"]:checked + .custom-checkbox { background: var(--gold); border-color: var(--gold); }
+    input[type="checkbox"]:checked + .custom-checkbox::after { content: '✔'; color: white; font-size: 14px; }
+    
+    .prod-controls { display: flex; align-items: center; gap: 15px; }
+    .qty-ctrl { display: flex; border: 1px solid #eee; border-radius: 8px; overflow: hidden; background: #fafafa; }
+    .qty-btn { width: 32px; height: 32px; background: transparent; border: none; cursor: pointer; font-weight: bold; color: var(--text-main); transition: 0.2s; }
+    .qty-btn:hover { background: var(--gold); color: white; }
+    .qty-input { width: 35px; text-align: center; border: none; background: transparent; font-weight: bold; }
+    .price-tag { font-weight: bold; color: var(--gold); min-width: 80px; text-align: left; }
+
+    /* الشريط العائم للحساب */
+    .total-sticky {
+        position: sticky; bottom: 30px; background: var(--text-main); color: white;
+        padding: 15px 30px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3); z-index: 900; max-width: 800px; margin: 40px auto 0;
+        transform: translateY(100px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .total-sticky.visible { transform: translateY(0); }
+
+    /* --- 6. النوافذ المنبثقة (Modals) --- */
+    .modal-overlay {
+        display: none; position: fixed; inset: 0; 
+        background: rgba(44, 36, 31, 0.9); z-index: 2000; 
+        overflow-y: auto; padding: 20px; backdrop-filter: blur(8px);
+        justify-content: center; align-items: flex-start; /* flex-start للسكرول */
+    }
+    .form-wrapper {
+        background: white; width: 100%; max-width: 600px; margin: 50px auto;
+        padding: 40px; border-radius: 20px; position: relative; 
+        animation: slideUp 0.4s ease-out; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+    .close-form { position: absolute; top: 25px; left: 25px; font-size: 1.5rem; cursor: pointer; color: #bbb; transition: 0.3s; }
+    .close-form:hover { color: var(--red-offer); }
+    .form-title { color: var(--text-main); margin-bottom: 25px; text-align: center; font-family: 'Reem Kufi'; font-size: 2rem; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; margin-bottom: 8px; color: var(--text-main); font-weight: bold; font-size: 0.95rem; }
+    .form-input, .form-select {
+        width: 100%; padding: 14px; background: #fcfcfc; border: 1px solid #eee;
+        color: #333; border-radius: 10px; font-family: 'Tajawal'; transition: 0.3s; font-size: 1rem;
+    }
+    .form-input:focus { border-color: var(--gold); background: white; box-shadow: 0 0 0 4px rgba(204, 164, 91, 0.1); }
+    
+    .submit-btn {
+        width: 100%; padding: 16px; background: var(--gold); border: none;
+        color: white; font-weight: bold; font-size: 1.1rem; border-radius: 12px;
+        cursor: pointer; margin-top: 20px; transition: 0.3s;
+    }
+    .submit-btn:hover { background: var(--text-main); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+    /* شاشة الشكر */
+    #thank-you-screen {
+        display: none; position: fixed; inset: 0;
+        background: var(--main-bg); z-index: 3000; flex-direction: column;
+        justify-content: center; align-items: center; text-align: center;
+    }
+    .check-icon { font-size: 6rem; color: var(--gold); margin-bottom: 20px; animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+
+    /* --- 7. الفوتر --- */
+    .site-footer {
+        background-color: var(--footer-bg); color: #fff; padding: 70px 5% 30px;
+        margin-top: 100px; position: relative; z-index: 10;
+        border-top: 4px solid var(--gold);
+    }
+    .footer-container {
+        max-width: 1200px; margin: 0 auto; display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px;
+    }
+    .footer-col h3 { color: var(--gold); margin-bottom: 25px; font-family: 'Reem Kufi'; font-size: 1.3rem; }
+    .footer-links { list-style: none; } .footer-links li { margin-bottom: 12px; }
+    .footer-links a { text-decoration: none; color: #ccc; transition: 0.3s; }
+    .footer-links a:hover { color: var(--gold); padding-right: 8px; }
+    .footer-bottom { text-align: center; margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; color: #777; font-size: 0.9rem; }
+
+    @keyframes fadeInUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+    @keyframes slideUp { from {opacity:0; transform:translateY(50px);} to {opacity:1; transform:translateY(0);} }
+    @keyframes popIn { from {transform:scale(0);} to {transform:scale(1);} }
+
+    @media (max-width: 768px) {
+        .navbar { padding: 15px 20px; } .nav-links { display: none; }
+        .page-header { padding: 120px 20px 40px; }
+        .page-title { font-size: 2.2rem; }
+        .pkg-card { transform: none !important; }
+        .prod-row { padding: 15px; font-size: 0.9rem; }
+        .total-sticky { bottom: 15px; width: 95%; padding: 12px 25px; }
+            /* القائمة الجانبية (همبرغر) - للجوال */
+.hamburger {
+    display: flex;
+    cursor: pointer;
+    z-index: 1001;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.bar {
+    width: 30px;
+    height: 3px;
+    background-color: var(--gold);
+    transition: 0.3s;
+}
+
+.hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.hamburger.active .bar:nth-child(2) { opacity: 0; }
+.hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+.mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    transition: 0.4s ease-in-out;
+    z-index: 1000;
+}
+
+.mobile-menu.active {
+    right: 0;
+}
+
+.mobile-menu a {
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.mobile-menu a:hover {
+    color: var(--gold);
+}
+    }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="fixed-bg" id="bg-image"></div>
+    <div class="bg-overlay"></div>
+
+    <nav class="navbar">
+        <div class="nav-logo" data-key="nav_logo" onclick="window.location.href='index.html'">أَكْمْ</div>
+        
+        <ul class="nav-links">
+            <li><a href="index.html" data-key="home">الرئيسية</a></li>
+            <li><a href="index.html#gallery-wrapper" data-key="gallery">المعرض</a></li>
+            <li><a href="index.html#warehouse-wrapper" data-key="warehouse">المستودع</a></li>
+            <li><a href="index.html#products-section" data-key="store">المتجر</a></li>
+            <li><a href="#footer" data-key="contact">اتصل بنا</a></li>
+        </ul>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="lang-btn" onclick="toggleLanguage()">English</button>
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html" data-key="home" onclick="toggleMobileMenu()">الرئيسية</a>
+            <a href="index.html#gallery-wrapper" data-key="gallery" onclick="toggleMobileMenu()">المعرض</a>
+            <a href="index.html#warehouse-wrapper" data-key="warehouse" onclick="toggleMobileMenu()">المستودع</a>
+            <a href="index.html#products-section" data-key="store" onclick="toggleMobileMenu()">المتجر</a>
+            <a href="#footer" data-key="contact" onclick="toggleMobileMenu()">اتصل بنا</a>
+        </div>
+    </nav>
+
+    <div class="page-header" id="page-header">
+        <div class="header-content">
+            <h1 class="page-title" id="page-title">...</h1>
+            <p class="page-subtitle" id="page-subtitle">...</p>
+            
+            <div class="mode-switcher">
+                <div class="mode-btn" id="btn-event" onclick="switchMode('event')" data-key="btn_event">باقات المناسبات</div>
+                <div class="mode-btn" id="btn-hotel" onclick="switchMode('hotel')" data-key="btn_hotel">باقات الفنادق</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="story-section" id="story-section">
+        <div class="story-title" data-key="story_title"><span>قصة أكم</span></div>
+        <p class="story-text" data-key="story_text">
+            بدأت "أكم" من رغبة في إعادة تعريف مفهوم الضيافة. لاحظنا أن القهوة غالباً ما تصل باردة، والخدمة تقليدية.
+            لذا صممنا عربة تجمع بين فخامة الخشب وسرعة الخدمة، وحولنا التقديم إلى تجربة تفاعلية حية.
+        </p>
+    </section>
+
+    <div class="container">
+        <div class="packages-grid" id="packages-container"></div>
+
+        <div id="builder-section">
+            <div class="story-title" style="margin-top: 60px;" data-key="builder_title"><span>صمم ضيافتك بنفسك</span></div>
+            <div id="builder-items"></div>
+            
+            <div class="total-sticky" id="sticky-total">
+                <div>
+                    <div style="font-size:0.8rem; opacity:0.8;" data-key="total_label">الإجمالي</div>
+                    <div style="font-size:1.4rem; font-weight:800;"><span id="builder-total-val">0</span> <span data-key="currency">ريال</span></div>
+                </div>
+                <button class="btn" style="background:white; color:var(--text-main); border:none; padding:8px 25px; border-radius:20px; font-weight:bold; cursor:pointer;" onclick="submitBuilder()" data-key="btn_confirm_build">اعتماد الباقة</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="booking-form-container" class="modal-overlay">
+        <div class="form-wrapper">
+            <span class="close-form" onclick="closeForm()">✕</span>
+            <h2 class="form-title" data-key="form_title">إكمال الحجز</h2>
+            
+            <div style="background:#f5f5f5; padding:15px; border-radius:10px; margin-bottom:25px; border-right:4px solid var(--gold);">
+                <div style="font-weight:bold; color:var(--text-main); margin-bottom:5px;" id="selected-pkg-name">-</div>
+                <div style="color:var(--gold); font-weight:bold; font-size:1.1rem;" id="form-total-display"></div>
+            </div>
+
+            <form id="main-form" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="booking-type">
+                <input type="hidden" id="selected-package">
+                <input type="hidden" id="custom-details">
+                <input type="hidden" id="final-total">
+
+                <div id="hotel-fields" style="display:none;">
+                    <div class="form-group"><label class="form-label" data-key="lbl_name">الاسم / الصفة</label><input id="h-name" class="form-input"></div>
+                    <div class="form-group"><label class="form-label" data-key="lbl_company">اسم الفندق</label><input id="h-company" class="form-input"></div>
+                    <div class="form-group"><label class="form-label" data-key="lbl_date_meet">تاريخ الاجتماع المناسب</label><input id="h-date" type="date" class="form-input"></div>
+                </div>
+
+                <div id="event-fields" style="display:none;">
+                    <div class="form-group"><label class="form-label" data-key="lbl_name">الاسم الكريم</label><input id="e-name" class="form-input"></div>
+                    <div class="form-group">
+                        <label class="form-label" data-key="lbl_event_type">نوع المناسبة</label>
+                        <select class="form-select" id="e-type">
+                            <option value="gathering" data-key="opt_gathering">جمعة عائلية</option>
+                            <option value="wedding" data-key="opt_wedding">زواج / ملكة</option>
+                            <option value="graduation" data-key="opt_grad">تخرج</option>
+                            <option value="corporate" data-key="opt_corp">فعالية شركة</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label class="form-label" data-key="lbl_date">تاريخ المناسبة</label><input id="e-date" type="date" class="form-input"></div>
+                </div>
+
+                <div class="form-group"><label class="form-label" data-key="lbl_phone">رقم الجوال</label><input id="com-phone" type="tel" class="form-input" required style="direction: ltr; text-align: right;"></div>
+                <div class="form-group"><label class="form-label" data-key="lbl_email">البريد الإلكتروني</label><input id="com-email" type="email" class="form-input" required></div>
+                <div class="form-group"><label class="form-label" data-key="lbl_map">الموقع (رابط)</label><input id="com-map" type="url" class="form-input"></div>
+
+                <button type="submit" class="submit-btn" id="submit-btn-text" data-key="btn_submit">إرسال الطلب</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="thank-you-screen">
+        <div class="check-icon">✨</div>
+        <h1 style="font-family: 'Reem Kufi'; margin-bottom: 15px;" id="thank-title">شكراً لثقتك بأكم</h1>
+        <p style="color: #777; max-width: 500px; line-height: 1.6; font-size:1.1rem;" id="thank-msg">...</p>
+        <p style="margin-top: 30px; font-size: 0.9rem; color: var(--gold);" data-key="redirect_msg">سيتم تحويلك للصفحة الرئيسية...</p>
+    </div>
+
+    <footer class="site-footer" id="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="nav-logo" style="margin-bottom: 15px;">أَكْمْ</div>
+                <p data-key="footer_about" style="color: #aaa; line-height: 1.6;">علامة سعودية فاخرة تقدم تجربة ضيافة استثنائية من خلال أجود أنواع القهوة والتمور والمكسرات.</p>
+            </div>
+            <div class="footer-col">
+                <h3 data-key="footer_links">روابط سريعة</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-key="home">الرئيسية</a></li>
+                    <li><a href="index.html#gallery-wrapper" data-key="gallery">المعرض</a></li>
+                    <li><a href="index.html#warehouse-wrapper" data-key="warehouse">المستودع</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3 data-key="footer_contact">تواصل معنا</h3>
+                <p data-key="loc_riyadh">الرياض، المملكة العربية السعودية</p>
+                <p style="direction: ltr; text-align: right;"> 0563494639</p>
+                <p>info@akm.sa</p>
+            </div>
+            <div class="footer-col">
+                <h3 data-key="footer_follow">تابعنا</h3>
+                <div class="social-icons">
+                    <a href="#">X</a> <a href="#">In</a> <a href="#">Sc</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p data-key="copyright">جميع الحقوق محفوظة © 2025 أكم - AKM</p>
+        </div>
+    </footer>
+    <script>
+        /* booking-script.js */
+
+/* =========================================
+   1. البيانات والمحتوى (Data Configuration)
+   ========================================= */
+
+// بيانات باقات الفنادق (مطابقة لملف baqatakm2)
+const HOTELS_DATA = [
+    { 
+        id: "h_lobby", 
+        name_ar: "ضيافة اللوبي", name_en: "Lobby Hospitality", 
+        desc_ar: "تشغيل كامل مجاني للفندق + خصم 50% لنزلاء VIP", 
+        desc_en: "Full free operation + 50% Discount for VIP guests", 
+        btn_ar: "طلب اجتماع", btn_en: "Request Meeting" 
+    },
+    { 
+        id: "h_hall", 
+        name_ar: "قاعات الأفراح", name_en: "Wedding Halls", 
+        desc_ar: "توريد ضمن باقات الفندق بأسعار جملة (B2B)", 
+        desc_en: "Supply within hotel packages at wholesale prices", 
+        btn_ar: "استفسار", btn_en: "Inquire" 
+    },
+    { 
+        id: "h_conf", 
+        name_ar: "المؤتمرات", name_en: "Conferences", 
+        desc_ar: "ضيافة اجتماعات الشركات (Coffee Break)", 
+        desc_en: "Corporate meetings hospitality (Coffee Break)", 
+        btn_ar: "عرض سعر", btn_en: "Get Quote" 
+    },
+    { 
+        id: "h_season", 
+        name_ar: "التشغيل الموسمي", name_en: "Seasonal Operation", 
+        desc_ar: "تغطية أوقات الذروة (رمضان/عيد) بنظام المشاركة", 
+        desc_en: "Peak time coverage (Ramadan/Eid) - Revenue Share", 
+        btn_ar: "حجز موسم", btn_en: "Book Season" 
+    },
+    { 
+        id: "h_room", 
+        name_ar: "توريد الغرف", name_en: "Room Supply", 
+        desc_ar: "بوكسات تمر وشوكلت فاخرة بشعار الفندق", 
+        desc_en: "Luxury dates & chocolate boxes co-branded", 
+        btn_ar: "طلب عينات", btn_en: "Request Samples" 
+    }
+];
+
+// بيانات باقات المناسبات (مطابقة لملف baqatakm2)
+const EVENT_PACKAGES = [
+    { 
+        id: "e_start", 
+        name_ar: "باقة التأسيس", name_en: "Foundation Package", 
+        price: 1800, old: 2200, 
+        badge_ar: "وفر 400", badge_en: "Save 400", 
+        features_ar: ["عربة أكم الخشبية", "قهوة سعودية (3 لتر)", "قهوة سوداء (3 لتر)", "تمر سكري فاخر (1 ك)", "أكواب (100 ضيف)"], 
+        features_en: ["Wooden AKM Cart", "Saudi Coffee (3L)", "Black Coffee (3L)", "Luxury Sukari Dates (1kg)", "Cups (100 guests)"] 
+    },
+    { 
+        id: "e_premium", 
+        name_ar: "باقة التميز", name_en: "Premium Package", 
+        price: 2800, old: 3500, 
+        badge_ar: "الأكثر طلباً", badge_en: "Most Popular", 
+        features_ar: ["تنسيق ورد للعربة", "قهوة سعودية (6 لتر)", "تمر محشية (1.5 ك)", "حلى (معمول/كوكيز)", "أكواب فاخرة (150)"], 
+        features_en: ["Cart Flower Arrangement", "Saudi Coffee (6L)", "Stuffed Dates (1.5kg)", "Sweets (Maamoul/Cookies)", "Luxury Cups (150)"] 
+    },
+    { 
+        id: "e_vip", 
+        name_ar: "باقة VIP", name_en: "VIP Package", 
+        price: 3800, old: 5000, 
+        badge_ar: "فخامة مطلقة", badge_en: "Ultimate Luxury", 
+        features_ar: ["موظف/ـة خدمة (5 ساعات)", "شاشة عرض تفاعلية", "مشروبات مفتوحة (15 لتر)", "تمر وسكريات (4.5 ك)", "شوكلت بلجيكي مكشوف"], 
+        features_en: ["Service Staff (5 Hours)", "Interactive Display Screen", "Open Drinks (15L)", "Dates & Sweets (4.5kg)", "Open Belgian Chocolate"] 
+    }
+];
+
+// عناصر "صمم باقتك" (Builder Items)
+const BUILDER_ITEMS = [
+    { 
+        cat_ar: "🛒 التجهيزات والمشروبات", cat_en: "Equipment & Drinks", 
+        items: [
+            { id: "cart", name_ar: "عربة أكم الخشبية", name_en: "AKM Wooden Cart", price: 1000, unit_ar: "شامل التوصيل", unit_en: "Inc. Delivery" },
+            { id: "saudi", name_ar: "قهوة سعودية فاخرة", name_en: "Saudi Coffee", price: 50, unit_ar: "لتر", unit_en: "Liter", def: 3 },
+            { id: "black", name_ar: "قهوة سوداء (Black)", name_en: "Black Coffee", price: 50, unit_ar: "لتر", unit_en: "Liter", def: 3 },
+            { id: "tea", name_ar: "شاي / كرك", name_en: "Tea / Karak", price: 40, unit_ar: "ترمس", unit_en: "Thermos", def: 3 }
+        ]
+    },
+    { 
+        cat_ar: "🌴 التمور والحلويات", cat_en: "Dates & Sweets", 
+        items: [
+            { id: "stuffed", name_ar: "تمر محشي فاخر", name_en: "Stuffed Dates", price: 100, unit_ar: "كيلو", unit_en: "Kg", def: 1 },
+            { id: "maamoul", name_ar: "معمول بيتي هش", name_en: "Homemade Maamoul", price: 70, unit_ar: "كيلو", unit_en: "Kg", def: 1 },
+            { id: "belgian", name_ar: "شوكلاتة بلجيكي مكشوفة", name_en: "Belgian Chocolate", price: 250, unit_ar: "كيلو", unit_en: "Kg", def: 1 },
+            { id: "swiss", name_ar: "شوكلاتة سويسري مكشوفة", name_en: "Swiss Chocolate", price: 300, unit_ar: "كيلو", unit_en: "Kg", def: 1 },
+            { id: "macaron", name_ar: "ماكرون فاخر", name_en: "Macaron", price: 120, unit_ar: "بوكس", unit_en: "Box", def: 1 },
+            { id: "pudding", name_ar: "بودينج", name_en: "Pudding", price: 120, unit_ar: "درزن", unit_en: "Dozen", def: 1 }
+        ]
+    },
+    { 
+        cat_ar: "👔 طاقم الخدمة", cat_en: "Service Staff", 
+        items: [
+            { id: "male", name_ar: "مضيف (صباب)", name_en: "Waiter (Male)", price: 300, unit_ar: "موظف", unit_en: "Staff", def: 1 },
+            { id: "female", name_ar: "مضيفة (صبابة)", name_en: "Waitress (Female)", price: 450, unit_ar: "Staff", unit_en: "Staff", def: 1 },
+            { id: "hours", name_ar: "ساعات عمل إضافية", name_en: "Extra Hours", price: 100, unit_ar: "ساعة", unit_en: "Hour", def: 1 }
+        ]
+    }
+];
+
+// قاموس النصوص والترجمات
+const TEXTS = {
+    ar: {
+        nav_logo: "أَكْمْ", home: "الرئيسية", gallery: "المعرض", warehouse: "المستودع", store: "المتجر", contact: "اتصل بنا", langBtn: "English",
+        btn_event: "باقات المناسبات", btn_hotel: "باقات الفنادق",
+        story_title: "قصة أكم", 
+        story_text: "بدأت أكم من رغبة في إعادة تعريف مفهوم الضيافة في المناسبات. لاحظنا أن القهوة غالباً ما تصل باردة، والخدمة تقليدية. لذا صممنا عربة تجمع بين فخامة الخشب وسرعة الخدمة، وحولنا التقديم إلى تجربة تفاعلية حية.",
+        builder_title: "أو صمم ضيافتك بنفسك", total_label: "إجمالي الباقة المصممة", currency: "ريال", btn_confirm_build: "اعتماد الباقة",
+        form_title: "إكمال الحجز", btn_submit: "إرسال الطلب", selected_pkg: "الباقة المختارة:",
+        lbl_name: "الاسم الكريم", lbl_company: "اسم الفندق / الشركة", lbl_phone: "رقم الجوال", lbl_email: "البريد الإلكتروني", 
+        lbl_date: "تاريخ المناسبة", lbl_date_meet: "تاريخ الاجتماع المناسب", lbl_map: "رابط الموقع (Google Maps)", lbl_address: "عنوان المناسبة",
+        lbl_event_type: "نوع المناسبة",
+        opt_gathering: "جمعة عائلية / خاصة", opt_wedding: "حفل زفاف / ملكة", opt_grad: "حفل تخرج", opt_corp: "فعالية شركة", opt_other: "أخرى",
+        footer_about: "علامة سعودية فاخرة تقدم تجربة ضيافة استثنائية من خلال أجود أنواع القهوة والتمور والمكسرات.",
+        footer_links: "روابط سريعة", footer_contact: "تواصل معنا", footer_follow: "تابعنا",
+        loc_riyadh: "الرياض، المملكة العربية السعودية", copyright: "جميع الحقوق محفوظة © 2025 أكم - AKM",
+        redirect_msg: "سيتم تحويلك للصفحة الرئيسية...",
+        thank_hotel_title: "تم استلام طلب الشراكة", thank_hotel_msg: "شكراً لثقتكم. سيقوم مدير المبيعات بمراجعة الطلب والتواصل معكم لتحديد موعد للاجتماع.",
+        thank_wedding: "ألف مبروك!، دامت أفراحكم", thank_wedding_msg: "نسعد جداً بمشاركتكم هذه الليلة المميزة. تم استلام طلبكم وسيتم التأكد من توفر الموعد وتأكيده لكم في أقرب وقت.",
+        thank_grad: "مبروك التخرج!", thank_grad_msg: "إنجاز عظيم يستحق احتفالاً رائعاً. شكراً لاختياركم أكم لمشاركتكم الفرحة.",
+        thank_general: "نتمنى لكم وقتاً سعيداً", thank_general_msg: "شكراً لاختياركم أكم لإضافة لمسة الفخامة لجمعتكم.",
+        hotel_title: "باقات الفنادق", hotel_subtitle: "اكتشف حلول الضيافة المصممة خصيصاً للفنادق والمناسبات الكبرى.",
+        event_title: "باقات المناسبات", event_subtitle: "اختر من بين باقاتنا المصممة لإضفاء الفخامة على مناسبتك الخاصة."
+    },
+    en: {
+        nav_logo: "AKM", home: "Home", gallery: "Gallery", warehouse: "Warehouse", store: "Store", contact: "Contact", langBtn: "العربية",
+        btn_event: "Event Packages", btn_hotel: "Hotel Packages",
+        story_title: "AKM Story", 
+        story_text: "AKM started with a desire to redefine hospitality. We noticed coffee often arrives cold, and service is traditional. So we designed a cart combining luxury wood with fast service, turning serving into a live interactive experience.",
+        builder_title: "Or Design Your Own", total_label: "Custom Package Total", currency: "SAR", btn_confirm_build: "Confirm Package",
+        form_title: "Complete Booking", btn_submit: "Submit Request", selected_pkg: "Selected Package:",
+        lbl_name: "Full Name", lbl_company: "Hotel / Company", lbl_phone: "Mobile Number", lbl_email: "Email Address", 
+        lbl_date: "Event Date", lbl_date_meet: "Meeting Date", lbl_map: "Location (Google Maps)", lbl_address: "Event Address",
+        lbl_event_type: "Event Type",
+        opt_gathering: "Family Gathering", opt_wedding: "Wedding", opt_grad: "Graduation", opt_corp: "Corporate", opt_other: "Other",
+        footer_about: "A luxury Saudi brand offering an exceptional hospitality experience through the finest coffee, dates, and nuts.",
+        footer_links: "Quick Links", footer_contact: "Contact Us", footer_follow: "Follow Us",
+        loc_riyadh: "Riyadh, Saudi Arabia", copyright: "All Rights Reserved © 2025 AKM",
+        redirect_msg: "Redirecting to home page...",
+        thank_hotel_title: "Partnership Request Received", thank_hotel_msg: "Thank you for your trust. Our sales manager will review the request and contact you to schedule a meeting.",
+        thank_wedding: "Congratulations!", thank_wedding_msg: "We are delighted to be part of your special night. Your request has been received.",
+        thank_grad: "Happy Graduation!", thank_grad_msg: "A great achievement deserves a great celebration. Thank you for choosing AKM.",
+        thank_general: "Have a wonderful time", thank_general_msg: "Thank you for choosing AKM to add a touch of luxury to your gathering.",
+        hotel_title: "Hotel Packages", hotel_subtitle: "Discover hospitality solutions tailored for hotels and large events.",
+        event_title: "Event Packages", event_subtitle: "Choose from our packages designed to add luxury to your special occasion."
+    }
+};
+
+/* =========================================
+   2. المنطق الأساسي (Core Logic)
+   ========================================= */
+
+// تهيئة المتغيرات من الرابط
+const urlParams = new URLSearchParams(window.location.search);
+let PAGE_TYPE = urlParams.get('type') || 'event';
+let currentLang = urlParams.get('lang') || 'ar';
+
+// التبديل بين الوضعين (فنادق / مناسبات)
+window.switchMode = function(mode) {
+    PAGE_TYPE = mode;
+    // تحديث الرابط بدون إعادة تحميل
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set('type', mode);
+    window.history.pushState({}, '', newUrl);
+    initPage();
+};
+
+// تبديل اللغة
+window.toggleLanguage = function() {
+    currentLang = currentLang === 'ar' ? 'en' : 'ar';
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set('lang', currentLang);
+    window.history.pushState({}, '', newUrl);
+    initPage();
+};
+
+// إدارة قائمة الجوال
+window.toggleMobileMenu = function() {
+    const menu = document.getElementById('mobileMenu');
+    const burger = document.querySelector('.hamburger');
+    if(menu.classList.contains('active')) {
+        menu.classList.remove('active'); burger.classList.remove('active');
+    } else {
+        menu.classList.add('active'); burger.classList.add('active');
+    }
+};
+
+/* =========================================
+   3. تهيئة الصفحة والعرض (Rendering)
+   ========================================= */
+
+function initPage() {
+    const t = TEXTS[currentLang];
+    
+    // 1. تطبيق اللغة والاتجاه
+    document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = currentLang;
+    document.querySelector('.nav-logo').innerText = t.nav_logo;
+    document.querySelector('.lang-btn').innerText = t.langBtn;
+    
+    document.querySelectorAll('[data-key]').forEach(el => {
+        if(t[el.dataset.key]) el.innerText = t[el.dataset.key];
+    });
+
+    if(currentLang === 'en') document.body.style.fontFamily = "sans-serif";
+    else document.body.style.fontFamily = "'Tajawal', sans-serif";
+
+    // 2. تحديث المحتوى حسب النوع
+    const isEvent = PAGE_TYPE === 'event';
+    
+    // أزرار التبديل
+    document.getElementById('btn-event').classList.toggle('active', isEvent);
+    document.getElementById('btn-hotel').classList.toggle('active', !isEvent);
+
+    // العناوين والخلفية
+    document.getElementById('page-title').innerText = isEvent ? t.event_title : t.hotel_title;
+    document.getElementById('page-subtitle').innerText = isEvent ? t.event_subtitle : t.hotel_subtitle;
+    
+    const bgUrl = isEvent 
+        ? "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=2670&auto=format&fit=crop"
+        : "https://images.unsplash.com/photo-1522798514-97ceb8c4f1c8?q=80&w=2670&auto=format&fit=crop";
+    document.getElementById('bg-image').style.backgroundImage = `url('${bgUrl}')`;
+
+    // إظهار/إخفاء الأقسام
+    document.getElementById('story-section').style.display = isEvent ? 'none' : 'block'; // القصة تظهر للفنادق أكثر
+    document.getElementById('builder-section').style.display = isEvent ? 'block' : 'none';
+    
+    // 3. رسم الباقات
+    renderPackages(isEvent);
+    if(isEvent) renderBuilder();
+}
+
+function renderPackages(isEvent) {
+    const grid = document.getElementById('packages-container');
+    grid.innerHTML = '';
+    
+    const data = isEvent ? EVENT_PACKAGES : HOTELS_DATA;
+
+    data.forEach(pkg => {
+        const name = currentLang === 'ar' ? pkg[`name_ar`] : pkg[`name_en`];
+        const price = currentLang === 'ar' ? pkg[`price`] : pkg[`price`]; // الأسعار رقمية غالباً
+        
+        let cardContent = '';
+
+        if (isEvent) {
+            // تصميم باقات المناسبات (سعر + خصائص + بادج)
+            const badge = currentLang === 'ar' ? pkg.badge_ar : pkg.badge_en;
+            const feats = currentLang === 'ar' ? pkg.features_ar : pkg.features_en;
+            const t_currency = TEXTS[currentLang].currency;
+            
+            cardContent = `
+                <div class="pkg-card ${pkg.badge_ar ? 'featured' : ''}">
+                    ${pkg.badge_ar ? `<div class="offer-badge">${badge}</div>` : ''}
+                    <div class="pkg-header ${pkg.id === 'e_vip' ? 'vip' : 'special'}">
+                        <div class="pkg-name">${name}</div>
+                        <div class="price-box">
+                            <span class="old-price">${pkg.old}</span>
+                            <span class="new-price">${pkg.price} <small>${t_currency}</small></span>
+                        </div>
+                    </div>
+                    <div class="pkg-body">
+                        <ul class="pkg-features">${feats.map(f => `<li>${f}<span>✔</span></li>`).join('')}</ul>
+                        <button class="select-btn" onclick="openForm('event', '${name}', ${pkg.price})">${TEXTS[currentLang].btn_submit}</button>
+                    </div>
+                </div>`;
+        } else {
+            // تصميم باقات الفنادق (وصف + زر)
+            const desc = currentLang === 'ar' ? pkg.desc_ar : pkg.desc_en;
+            const btn = currentLang === 'ar' ? pkg.btn_ar : pkg.btn_en;
+            
+            cardContent = `
+                <div class="pkg-card">
+                    <div class="pkg-header vip">
+                        <div class="pkg-name" style="font-size:1.4rem">${name}</div>
+                    </div>
+                    <div class="pkg-body">
+                        <p style="color:#555; text-align:center; margin-bottom:25px; font-size:1rem; line-height:1.6;">${desc}</p>
+                        <button class="select-btn" onclick="openForm('hotel', '${name}', 0)">${btn}</button>
+                    </div>
+                </div>`;
+        }
+        
+        grid.innerHTML += cardContent;
+    });
+}
+
+/* =========================================
+   4. منطق صمم باقتك (Builder)
+   ========================================= */
+
+function renderBuilder() {
+    const container = document.getElementById('builder-items');
+    container.innerHTML = '';
+    const t_currency = TEXTS[currentLang].currency;
+
+    BUILDER_ITEMS.forEach(cat => {
+        const catName = currentLang === 'ar' ? cat.cat_ar : cat.cat_en;
+        let rows = '';
+        
+        cat.items.forEach(item => {
+            const name = currentLang === 'ar' ? item.name_ar : item.name_en;
+            const unit = currentLang === 'ar' ? item.unit_ar : item.unit_en;
+            
+            // أزرار التحكم بالكمية (+/-)
+            const controls = item.id === 'cart' 
+                ? `<div class="price-tag">${item.price} ${t_currency}</div>` 
+                : `<div class="prod-controls">
+                     <div class="qty-ctrl">
+                        <button class="qty-btn" type="button" onclick="updateQty('${item.id}', -1)">-</button>
+                        <input id="qty-${item.id}" value="${item.def || 1}" class="qty-input" readonly>
+                        <button class="qty-btn" type="button" onclick="updateQty('${item.id}', 1)">+</button>
+                     </div>
+                     <div class="price-tag" id="pr-${item.id}">0 ${t_currency}</div>
+                   </div>`;
+
+            rows += `
+                <div class="prod-row">
+                    <div class="prod-info">
+                        <label class="check-group">
+                            <input type="checkbox" id="chk-${item.id}" onchange="calcBuilder()" data-price="${item.price}" data-name="${name}" data-unit="${unit}" style="display:none;">
+                            <div class="custom-checkbox"></div>
+                        </label>
+                        <div class="prod-details" style="margin-right:10px; margin-left:10px;">
+                            <strong>${name}</strong><small>${unit}</small>
+                        </div>
+                    </div>
+                    ${controls}
+                </div>`;
+        });
+
+        container.innerHTML += `
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="this.parentElement.classList.toggle('active')">
+                    <div class="acc-title">${catName}</div>
+                    <span>▼</span>
+                </div>
+                <div class="accordion-body">${rows}</div>
+            </div>`;
+    });
+}
+
+// تحديث الكمية
+window.updateQty = function(id, delta) {
+    const input = document.getElementById('qty-'+id);
+    let val = parseInt(input.value) + delta;
+    if(val < 1) val = 1;
+    if(id === 'hours' && val < 0) val = 0;
+    input.value = val;
+    calcBuilder(); // إعادة الحساب
+};
+
+// حساب المجموع الكلي للباقة المصممة
+window.calcBuilder = function() {
+    let total = 0;
+    const t_currency = TEXTS[currentLang].currency;
+    
+    document.querySelectorAll('#builder-items input[type="checkbox"]').forEach(chk => {
+        const id = chk.id.replace('chk-', '');
+        const price = parseInt(chk.dataset.price);
+        const priceTag = document.getElementById('pr-'+id);
+        
+        if (chk.checked) {
+            let qty = 1;
+            const qtyInput = document.getElementById('qty-'+id);
+            if(qtyInput) qty = parseInt(qtyInput.value);
+            
+            const sub = price * qty;
+            total += sub;
+            if(priceTag) priceTag.innerText = sub + ' ' + t_currency;
+        } else {
+            if(priceTag) priceTag.innerText = '0 ' + t_currency;
+        }
+    });
+
+    document.getElementById('builder-total-val').innerText = total;
+    const sticky = document.getElementById('sticky-total');
+    if(total > 0) sticky.classList.add('visible');
+    else sticky.classList.remove('visible');
+};
+
+// اعتماد الباقة المصممة وفتح الفورم
+window.submitBuilder = function() {
+    const total = document.getElementById('builder-total-val').innerText;
+    if(total == "0") return;
+
+    let details = "";
+    document.querySelectorAll('#builder-items input[type="checkbox"]:checked').forEach(chk => {
+        const id = chk.id.replace('chk-', '');
+        const name = chk.dataset.name;
+        const unit = chk.dataset.unit;
+        if(id === 'cart') {
+            details += `• ${name}\n`;
+        } else {
+            const q = document.getElementById('qty-'+id).value;
+            details += `• ${name}: ${q} ${unit}\n`;
+        }
+    });
+
+    const pkgName = currentLang === 'ar' ? "باقة مخصصة (تصميم العميل)" : "Custom Package";
+    openForm('event', pkgName, total, details);
+};
+
+
+/* =========================================
+   5. إدارة الفورم والإرسال (Form & Submit)
+   ========================================= */
+
+// فتح الفورم وتعبئة البيانات المخفية
+window.openForm = function(type, pkgName, price, customDetails="") {
+    document.getElementById('booking-form-container').style.display = 'flex'; // flex للتوسط
+    
+    const t_currency = TEXTS[currentLang].currency;
+    
+    // تعبئة العرض
+    document.getElementById('selected-pkg-name').innerText = pkgName;
+    document.getElementById('form-total-display').innerText = price > 0 ? price + ' ' + t_currency : '';
+    
+    // تعبئة الحقول المخفية
+    document.getElementById('booking-type').value = type;
+    document.getElementById('selected-package').value = pkgName;
+    document.getElementById('final-total').value = price;
+    document.getElementById('custom-details').value = customDetails;
+
+    // تبديل الحقول الظاهرة
+    document.getElementById('hotel-fields').style.display = type === 'hotel' ? 'block' : 'none';
+    document.getElementById('event-fields').style.display = type === 'event' ? 'block' : 'none';
+    document.getElementById('order-summary').style.display = type === 'event' ? 'block' : 'none';
+};
+
+window.closeForm = function() {
+    document.getElementById('booking-form-container').style.display = 'none';
+};
+
+// --- الإرسال لسكربت جوجل (CORS Safe) ---
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwH6m5FvOgXGaX9ZOtOtklzhN6AN7jfGzzzXs-5CgFdaP8cYg2VJ4HHjE6GfD6bnx2T1w/exec";
+
+window.handleFormSubmit = function(e) {
+    e.preventDefault();
+    
+    const btn = document.getElementById('submit-btn-text');
+    const originalText = btn.innerText;
+    btn.innerText = currentLang === 'ar' ? "جاري الإرسال..." : "Sending...";
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
+
+    // تجميع البيانات
+    const type = document.getElementById('booking-type').value;
+    const pkgName = document.getElementById('selected-package').value;
+    const customDet = document.getElementById('custom-details').value;
+    // دمج التفاصيل المخصصة مع اسم الباقة للحفظ
+    const finalPkg = customDet ? `${pkgName}\n${customDet}` : pkgName;
+
+    const formData = {
+        type: type,
+        lang: currentLang,
+        phone: document.getElementById('com-phone').value,
+        email: document.getElementById('com-email').value,
+        mapLink: document.getElementById('com-map').value,
+        package: finalPkg,
+        total: document.getElementById('final-total').value,
+        
+        // بيانات شرطية
+        name: type === 'hotel' ? document.getElementById('h-name').value : document.getElementById('e-name').value,
+        company: type === 'hotel' ? document.getElementById('h-company').value : "",
+        eventDate: type === 'event' ? document.getElementById('e-date').value : document.getElementById('h-date').value,
+        eventType: type === 'event' ? document.getElementById('e-type').value : "",
+        address: type === 'event' ? document.getElementById('inp-address')?.value || "" : ""
+    };
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(formData) // إرسال كـ نص JSON عادي لتجاوز CORS
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            showThankYou();
+        } else {
+            alert("Error: " + data.message);
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Connection Error / خطأ في الاتصال");
+        btn.innerText = originalText;
+        btn.disabled = false;
+    });
+};
+
+function showThankYou() {
+    const t = TEXTS[currentLang];
+    const screen = document.getElementById('thank-you-screen');
+    const title = document.getElementById('thank-title');
+    const msg = document.getElementById('thank-msg');
+    const type = document.getElementById('booking-type').value;
+    const eType = document.getElementById('e-type').value;
+
+    if (type === 'hotel') {
+        title.innerText = t.thank_hotel_title;
+        msg.innerText = t.thank_hotel_msg;
+    } else {
+        if (eType === 'wedding') { title.innerText = t.thank_wedding; msg.innerText = t.thank_wedding_msg; }
+        else if (eType === 'graduation') { title.innerText = t.thank_grad; msg.innerText = t.thank_grad_msg; }
+        else { title.innerText = t.thank_general; msg.innerText = t.thank_general_msg; }
+    }
+
+    document.getElementById('booking-form-container').style.display = 'none';
+    screen.style.display = 'flex';
+
+    setTimeout(() => { window.location.href = 'index.html'; }, 5000);
+}
+
+// تشغيل الصفحة
+initPage();
+    </script>
+    </body>
+</html>
