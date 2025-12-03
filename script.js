@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';   
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -221,18 +222,24 @@ composer.addPass(bloomPass);
 // تحميل النموذج (Cart Model)
 const loader = new GLTFLoader();
 
+// >>> بداية الكود الجديد لإصلاح مشكلة Draco <<<
+const dracoLoader = new DRACOLoader();
+// نستخدم سيرفر جوجل السريع لفك التشفير (لا يحتاج رفع ملفات)
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+loader.setDRACOLoader(dracoLoader);
+// >>> نهاية الكود الجديد <<<
+
 loader.load('./cart.glb', function (gltf) {
+    // ... باقي الكود كما هو تماماً بدون تغيير ...
     const cartModel = gltf.scene;
     cartModel.scale.set(0.008, 0.008, 0.008); 
     
-    // توسيط النموذج
     const box = new THREE.Box3().setFromObject(cartModel);
     const center = box.getCenter(new THREE.Vector3());
     cartModel.position.x += (cartModel.position.x - center.x);
     cartModel.position.z += (cartModel.position.z - center.z);
     cartModel.position.y += (cartModel.position.y - center.y); 
 
-    // تحسين المواد (Materials)
     cartModel.traverse((node) => {
         if (node.isMesh) {
             node.castShadow = true; node.receiveShadow = true;
@@ -251,7 +258,6 @@ loader.load('./cart.glb', function (gltf) {
     scene.add(pivot);
     pivot.add(cartModel);
 
-    // إخفاء اللودر عند الانتهاء
     const loaderElem = document.getElementById('loader');
     if(loaderElem) {
         loaderElem.style.opacity = 0;
@@ -261,7 +267,6 @@ loader.load('./cart.glb', function (gltf) {
     initScrollAnimation(pivot);
 
 }, undefined, function(e) { console.error("Error loading cart model:", e); });
-
 
 // --- تحريك العربة (Scroll Animation) ---
 function initScrollAnimation(modelGroup) {
