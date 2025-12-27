@@ -793,3 +793,44 @@ html[dir="ltr"] .footer-container {
     }
 }
 
+/* حاوية القسم بالكامل - نعطيها طولاً إضافياً لتمكين السكرول */
+#zoom-section {
+    height: 300vh; /* كلما زاد الرقم، زادت مسافة السكرول المطلوبة */
+    position: relative;
+    background-color: #000; /* لون الخلفية */
+}
+
+/* الحاوية التي ستثبت على الشاشة */
+.zoom-container {
+    height: 100vh;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    overflow: hidden; /* لمنع خروج الصورة عن الإطار عند التكبير */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* تنسيق الصورة */
+.zoom-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* لملء الشاشة بالكامل */
+    will-change: transform; /* لتحسين الأداء أثناء التحريك */
+}
+
+/* تنسيق النص (اختياري) */
+.zoom-content {
+    position: absolute;
+    z-index: 2;
+    text-align: center;
+    opacity: 0; /* مخفي في البداية */
+    color: var(--gold); /* أو #fff */
+}
+
+.zoom-title {
+    font-family: 'Amiri', serif;
+    font-size: 4rem;
+    text-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
