@@ -1,10 +1,4 @@
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';   
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -104,6 +98,26 @@ const translations = {
 
 let currentLang = 'ar';
 
+/* =========================================
+   5. إدارة شاشة التحميل (Loader)
+   ========================================= */
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    
+    if (loader) {
+        // استخدام GSAP لإخفاء اللودر بنعومة
+        gsap.to(loader, {
+            opacity: 0,
+            duration: 1,
+            ease: "power2.inOut",
+            onComplete: () => {
+                loader.style.display = 'none';
+                // يمكنك حذف العنصر تماماً من الـ DOM لتخفيف الحمل
+                // loader.remove(); 
+            }
+        });
+    }
+});
 // إتاحة الدوال للنطاق العام (Window) لأنها مستدعاة عبر HTML
 window.toggleLanguage = function() {
     currentLang = currentLang === 'ar' ? 'en' : 'ar';
@@ -180,8 +194,6 @@ function initProductSection() {
             pin: true,
             scrub: 1,
             // قتل العربة عند الدخول لضمان عدم ظهورها
-            onEnter: () => gsap.set("#canvas-container", { autoAlpha: 0 }),
-            onLeaveBack: () => gsap.set("#canvas-container", { autoAlpha: 1 })
         }
     });
 
@@ -331,4 +343,5 @@ initPanorama(
     'warehouse-wrapper', 
     { text1: '#w-text1', text2: '#w-text2', map: '#w-map' }
 );
+
 
