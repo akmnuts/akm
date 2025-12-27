@@ -345,3 +345,45 @@ initPanorama(
 );
 
 
+// تأكد من استيراد المكتبات في بداية الملف إذا لم تكن موجودة
+// import { gsap } from 'gsap';
+// import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+// دالة تفعيل الزوم
+function initZoomEffect() {
+    const section = document.querySelector('#zoom-section');
+    const image = document.querySelector('.zoom-img');
+    const content = document.querySelector('.zoom-content');
+
+    if (!section || !image) return;
+
+    // Timeline لربط الحركات ببعضها
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: section,      // العنصر الذي يراقب السكرول
+            start: "top top",      // يبدأ عندما يصل رأس القسم لأعلى الشاشة
+            end: "bottom bottom",  // ينتهي عندما يصل أسفل القسم لأسفل الشاشة
+            scrub: true,           // ربط الحركة بالسكرول (ناعم)
+            pin: false             // لا نحتاج للتثبيت هنا لأننا استخدمنا position: sticky في CSS
+                                   // ملاحظة: يمكنك تفعيل pin: true وإزالة sticky من CSS إذا فضلت ذلك
+        }
+    });
+
+    // حركة التكبير (Zoom In)
+    tl.to(image, {
+        scale: 3,          // نسبة التكبير (3 أضعاف)
+        ease: "none",      // حركة خطية بدون تسارع
+        transformOrigin: "center center" // التكبير من المنتصف
+    })
+    // ظهور النص تدريجياً في منتصف الحركة
+    .to(content, {
+        opacity: 1,
+        y: -50,            // تحريك النص قليلاً للأعلى
+        duration: 0.5
+    }, 0.5); // يبدأ في منتصف التايم لاين
+}
+
+// استدعاء الدالة عند تحميل الصفحة
+window.addEventListener('load', initZoomEffect);
